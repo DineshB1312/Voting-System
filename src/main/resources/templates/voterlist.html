@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .message, .error {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div align="center">
+    <h1>Voter List</h1>
+
+    <!-- Display success or error messages -->
+    <div th:if="${message != null}" class="message">
+        <p th:text="${message}"></p>
+    </div>
+    <div th:if="${error != null}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Voter Name</th>
+                <th>Username</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="voter : ${voters}">
+                <td th:text="${voter.id}"></td>
+                <td th:text="${voter.voterName}"></td>
+                <td th:text="${voter.username}"></td>
+                <td th:text="${voter.dob}"></td>
+                <td th:text="${voter.gender}"></td>
+                <td>
+                    <form action="/deletevoter" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${voter.id}"/>
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+   <!--   <a href="/voterregister">Register New Voter</a>-->
+</div>
+</body>
+</html>

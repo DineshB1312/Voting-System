@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting System Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        .header {
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .header .user-info {
+            font-size: 1em;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #444;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding-top: 70px; /* Adjust for header height */
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: width 0.3s;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 900;
+            overflow-y: auto;
+        }
+        .sidebar:hover {
+            width: 300px;
+        }
+        .sidebar h2 {
+            font-size: 1.5em;
+            color: #ddd;
+            text-align: center;
+            font-weight: bold;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+            margin: 0 20px;
+        }
+        .sidebar a {
+            color: #ddd;
+            text-decoration: none;
+            display: block;
+            padding: 15px;
+            margin: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            background-color: #555;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .sidebar a:hover {
+            background-color: #666;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        .submenu {
+            max-height: 0;
+            padding-left: 20px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .submenu.show {
+            max-height: 500px; /* Adjust if needed */
+        }
+        .submenu a {
+            background-color: #666;
+            padding-left: 40px; /* Increased padding for better alignment */
+            color: #ddd;
+            transition: all 0.3s ease;
+        }
+        .submenu a:hover {
+            background-color: #777;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        .content {
+            flex-grow: 1;
+            padding: 80px 20px 20px; /* Adjust for header height */
+            background-color: #f0f0f0;
+            margin-left: 250px; /* Sidebar width */
+            transition: margin-left 0.3s;
+        }
+        .content h1 {
+            margin-top: 0;
+            color: #333;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .content p {
+            font-size: 1.2em;
+            color: #555;
+        }
+        .sidebar:hover + .content {
+            margin-left: 300px; /* Adjust for sidebar hover */
+        }
+        iframe {
+            width: 100%;
+            height: calc(100vh - 80px); /* Adjust for header height */
+            border: none;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Voting System Dashboard</h1>
+        <div class="user-info">Welcome, <span id="username">User</span></div>
+    </div>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="#" id="admin-btn">Admin</a>
+        <div class="submenu" id="admin-submenu">
+           <!--  <a href="/adminlogin" target="content-frame">Admin Login</a> -->
+            <a href="/adminregister" target="content-frame">Admin Register</a>
+            <a href="/adminlist" target="content-frame">View Admins</a>
+            <a href="/voterlist" target="content-frame">View Voter</a>
+            <a href="/deletevoter" target="content-frame">Delete Voter</a>
+        </div>
+        <a href="#" id="voter-btn">Voter</a>
+        <div class="submenu" id="voter-submenu">
+            <a href="/voterregister" target="content-frame">Add Voter</a>
+            <a href="/voterlist" target="content-frame">View Voter</a>
+            <a href="/updatevoter?id=1" target="content-frame">Update Voter</a>
+        </div>
+    </div>
+    <div class="content">
+        <iframe name="content-frame" src=""></iframe>
+    </div>
+
+    <script>
+        // Example of setting the username dynamically
+        function setUsername(username) {
+            document.getElementById('username').innerText = username;
+        }
+        
+        setUsername('Voter');
+
+        document.getElementById('admin-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+            var adminSubmenu = document.getElementById('admin-submenu');
+            var voterSubmenu = document.getElementById('voter-submenu');
+            
+            // Toggle the admin submenu
+            if (adminSubmenu.classList.contains('show')) {
+                adminSubmenu.classList.remove('show');
+            } else {
+                adminSubmenu.classList.add('show');
+                voterSubmenu.classList.remove('show'); // Hide voter submenu if open
+            }
+        });
+
+        document.getElementById('voter-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+            var adminSubmenu = document.getElementById('admin-submenu');
+            var voterSubmenu = document.getElementById('voter-submenu');
+            
+            // Toggle the voter submenu
+            if (voterSubmenu.classList.contains('show')) {
+                voterSubmenu.classList.remove('show');
+            } else {
+                voterSubmenu.classList.add('show');
+                adminSubmenu.classList.remove('show'); // Hide admin submenu if open
+            }
+        });
+    </script>
+</body>
+</html>
